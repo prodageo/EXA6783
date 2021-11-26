@@ -42,14 +42,15 @@ public final class CamelJmsToFileExample {
         // ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://localhost?broker.persistent=false");
 
 	// to understand vm:, tcp:, cf http://activemq.apache.org/configuring-transports.html
-        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://casisbelli:3700");
+        // ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://casisbelli:3700");
+	ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://loclahost:61616");
+	    
         // Note we can explicit name the component
-        context.addComponent("cnx2jms", JmsComponent.jmsComponentAutoAcknowledge(connectionFactory));
+        context.addComponent("amq-broker", JmsComponent.jmsComponentAutoAcknowledge(connectionFactory));
         
 	context.addRoutes(new RouteBuilder() {
             public void configure() {
-            //    from("test-jms:queue:test.queue").to("file://tmp/camel");
-                from("cnx2jms:queue:equipe2queue").to("file:/tmp/camel");
+                from("amq-broker:queue:equipe2queue").to("file:/tmp/camel");
             }
         });
         
